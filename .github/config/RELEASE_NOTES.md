@@ -6,23 +6,20 @@
 Join the telegram here: https://t.me/WildKernelsTG
 
 # Features
-- [KernelSU-Next](#kernelsu-next)
+- [KernelSU](#kernelsu)
 - [SUSFS v2.1.0](#susfs-v210)
 - [Baseband Guard (BBG)](#baseband-guard-bbg)
 - [DroidSpaces-OSS](#droidspaces-oss)
 - [Networking Improvements](#networking)
 
-## [KernelSU-Next](https://github.com/KernelSU-Next/KernelSU-Next)
+## [KernelSU (Official)](https://github.com/tiann/KernelSU)
 
 A kernel-based root solution for Android devices.
-
-> [!WARNING]
-> This release uses the [pershoot/KernelSU-Next](https://github.com/pershoot/KernelSU-Next) fork. The fork maintainer has said it is not ready for production use, so treat it as use at your own risk.
 
 Manager: {{KSU_MANAGER}}
 
 > [!IMPORTANT]
-> For best compatiblity ensure your Manager Version and Kernel Version match eg. 30100 = 30100.
+> For best compatibility ensure your Manager App version matches the KernelSU version.
 
 **Version**  
 `{{KSU_VERSION}}`
@@ -31,10 +28,10 @@ Manager: {{KSU_MANAGER}}
 `{{KSU_GIT_TAG}}`
 
 **Branch**  
-`{{KSUN_BRANCH}}`
+`{{KSU_BRANCH}}`
 
 **Commit**  
-`{{KSUN_COMMIT}}`
+`{{KSU_COMMIT}}`
 
 ## [SUSFS v2.1.0](https://gitlab.com/simonpunk/susfs4ksu)
 

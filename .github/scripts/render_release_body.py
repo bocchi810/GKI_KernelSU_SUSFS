@@ -7,9 +7,12 @@ from pathlib import Path
 PLACEHOLDERS = {
     "{{KSU_VERSION}}": lambda: os.environ.get("KSU_VERSION", "unknown"),
     "{{KSU_GIT_TAG}}": lambda: os.environ.get("KSU_GIT_TAG", "no-tag"),
-    "{{KSUN_BRANCH}}": lambda: os.environ.get("KSUN_BRANCH", "dev"),
-    "{{KSUN_COMMIT}}": lambda: os.environ.get("KSUN_COMMIT", "unknown"),
+    "{{KSU_BRANCH}}": lambda: os.environ.get("KSU_BRANCH", "main"),
+    "{{KSU_COMMIT}}": lambda: os.environ.get("KSU_COMMIT", "unknown"),
     "{{KSU_MANAGER}}": lambda: os.environ.get("KSU_MANAGER", "Placeholder"),
+    # Backward compat with old templates
+    "{{KSUN_BRANCH}}": lambda: os.environ.get("KSUN_BRANCH", "main"),
+    "{{KSUN_COMMIT}}": lambda: os.environ.get("KSUN_COMMIT", "unknown"),
 }
 
 
@@ -70,11 +73,11 @@ for line in data["release"]["disclaimer"]:
 
 kernelsu = data.get("kernelsu", {})
 emit()
-emit(f"## {kernelsu.get('name', 'KernelSU-Next')}")
+emit(f"## {kernelsu.get('name', 'KernelSU (Official)')}")
 emit(f"- Version: {os.environ.get('KSU_VERSION', kernelsu.get('version', 'unknown'))}")
 emit(f"- Tag: {os.environ.get('KSU_GIT_TAG', kernelsu.get('tag', 'no-tag'))}")
-emit(f"- Branch: {os.environ.get('KSUN_BRANCH', kernelsu.get('branch', 'dev'))}")
-emit(f"- Commit: {os.environ.get('KSUN_COMMIT', kernelsu.get('commit', 'unknown'))}")
+emit(f"- Branch: {os.environ.get('KSU_BRANCH', kernelsu.get('branch', 'main'))}")
+emit(f"- Commit: {os.environ.get('KSU_COMMIT', kernelsu.get('commit', 'unknown'))}")
 if kernelsu.get("url"):
     emit(f"- URL: {kernelsu['url']}")
 if kernelsu.get("manager"):

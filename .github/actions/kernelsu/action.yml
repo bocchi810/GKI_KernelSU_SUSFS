@@ -2,7 +2,7 @@ name: Setup Official KernelSU
 description: Download and configure official KernelSU (tiann/KernelSU) with version tracking
 inputs:
   use_latest_commits:
-    description: 'Use the latest tag/commit instead of a pinned commit'
+    description: 'Use the latest main branch commit instead of a pinned tag'
     required: false
     default: true
 
@@ -16,8 +16,9 @@ runs:
         set -euo pipefail
 
         if [ "${{ inputs.use_latest_commits }}" = "true" ]; then
-          echo "Using latest official KernelSU (latest tag)"
-          curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
+          echo "Using latest official KernelSU (main branch)"
+          # Pass 'main' so setup.sh stays on main branch instead of checking out the latest tag
+          curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s main
         else
           COMMITS_JSON="${{ github.workspace }}/.github/config/commits.json"
           KSU_TAG=$(jq -er '.kernelsu.tag // empty' "$COMMITS_JSON")

@@ -236,13 +236,11 @@ jobs:
         set -euo pipefail
 
         if [ "${{ inputs.use_latest_commits }}" = "true" ]; then
-          echo "Cloning official KernelSU (latest tag)"
+          echo "Cloning official KernelSU (main branch tip)"
           git clone --depth=1 https://github.com/tiann/KernelSU.git /tmp/kernelsu
           cd /tmp/kernelsu
-          KSU_TAG="$(git describe --abbrev=0 --tags 2>/dev/null || echo 'main')"
-          echo "Latest tag: $KSU_TAG"
-          git fetch --depth=50 origin "refs/tags/$KSU_TAG"
-          git checkout "tags/$KSU_TAG"
+          # Already on main branch with depth=1 clone
+          echo "Using main branch at: $(git rev-parse --short HEAD)"
         else
           echo "Cloning official KernelSU"
           git clone https://github.com/tiann/KernelSU.git /tmp/kernelsu
@@ -417,13 +415,11 @@ jobs:
         set -euo pipefail
 
         if [ "${{ inputs.use_latest_commits }}" = "true" ]; then
-          echo "Cloning official KernelSU (latest tag)"
+          echo "Cloning official KernelSU (main branch tip)"
           git clone --depth=1 https://github.com/tiann/KernelSU.git /tmp/kernelsu
           cd /tmp/kernelsu
-          KSU_TAG="$(git describe --abbrev=0 --tags 2>/dev/null || echo 'main')"
-          echo "Latest tag: $KSU_TAG"
-          git fetch --depth=50 origin "refs/tags/$KSU_TAG"
-          git checkout "tags/$KSU_TAG"
+          # Already on main branch with depth=1 clone
+          echo "Using main branch at: $(git rev-parse --short HEAD)"
         else
           echo "Cloning official KernelSU"
           git clone https://github.com/tiann/KernelSU.git /tmp/kernelsu

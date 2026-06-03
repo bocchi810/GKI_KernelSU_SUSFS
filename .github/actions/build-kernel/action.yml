@@ -48,7 +48,8 @@ runs:
       SKIP_MRPROPER=1
       EOF
 
-      cat "${{ github.workspace }}/wild_gki.fragment" > common/arch/arm64/configs/gki_defconfig
+      # Append fragment to defconfig (never overwrite — would trigger savedefconfig mismatch)
+      cat "${{ github.workspace }}/wild_gki.fragment" >> common/arch/arm64/configs/gki_defconfig
       cp "${{ github.workspace }}/gki_build_overrides.fragment" "${{ github.workspace }}/kernel/common/gki_build_overrides.fragment"
 
       mkdir -p /home/runner/out

@@ -48,13 +48,37 @@ runs:
       SKIP_MRPROPER=1
       EOF
 
-      # Append fragment to defconfig (never overwrite — would trigger savedefconfig mismatch)
-      cat "${{ github.workspace }}/wild_gki.fragment" >> common/arch/arm64/configs/gki_defconfig
       cp "${{ github.workspace }}/gki_build_overrides.fragment" "${{ github.workspace }}/kernel/common/gki_build_overrides.fragment"
 
       mkdir -p /home/runner/out
 
       if [ -f "build/build.sh" ]; then
+        # Legacy build system: don't touch gki_defconfig directly.
+        # Instead, override POST_DEFCONFIG_CMDS to apply our fragment
+        # after defconfig processing, bypassing the savedefconfig check.
+        # Build a proper shell script snippet and append it to build config.
+        {
+          echo
+          echo '# Wild Kernel: apply custom config fragment after defconfig'
+          echo 'apply_wild_fragment() {'
+          echo '  local fragment="${{ github.workspace }}/wild_gki.fragment"'
+          echo '  if [ ! -f "$fragment" ]; then echo "Wild fragment not found, skipping"; return; fi'
+          echo '  echo "Merging Wild Kernel config fragment into .config..."'
+          echo '  while IFS= read -r line; do'
+          echo '    line="$(echo "$line" | xargs)"'
+          echo '    [[ -z "$line" || "$line" == \#* ]] && continue'
+          echo '    local config="${line%%=*}"'
+          echo '    if grep -q "^${config}=" "${OUT_DIR}/.config" 2>/dev/null; then'
+          echo '      sed -i "s|^${config}=.*|${line}|" "${OUT_DIR}/.config"'
+          echo '    else'
+          echo '      echo "${line}" >> "${OUT_DIR}/.config"'
+          echo '    fi'
+          echo '  done < "$fragment"'
+          echo '  make -C "${KERNEL_DIR}" O="${OUT_DIR}" ARCH=arm64 olddefconfig'
+          echo '}'
+          echo 'POST_DEFCONFIG_CMDS="apply_wild_fragment"'
+        } >> common/build.config.gki.aarch64
+
         BUILD_GKI_ARTIFACTS= \
         BUILD_GKI_CERTIFICATION_TOOLS=0 \
         BUILD_SYSTEM_DLKM=0 \
